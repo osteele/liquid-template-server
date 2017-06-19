@@ -16,19 +16,19 @@ The server must be running on the same machine as the client, so that it the `in
 
 ## Status
 
-[x] Render template
-[ ] Jekyll Liquid filters
-[ ] Jekyll Liquid tags
-  [x] include
-  [x] link
-  [ ] remaining tags
-[ ] Performance
-  [x] Cache template variables across renders
-  [ ] Cache compiled templates
-[ ] Server infrastructure
-  [x] JSON-RPC HTTP service
-  [ ] JSON-RPC socket service
-  [ ] Logging
+- [x] Render template
+- [ ] Jekyll Liquid filters
+- [ ] Jekyll Liquid tags
+  - [x] include
+  - [x] link
+  - [ ] remaining tags
+- [ ] Performance
+  - [x] Cache template variables across renders
+  - [ ] Cache compiled templates
+- [ ] Server infrastructure
+  - [x] JSON-RPC HTTP service
+  - [ ] JSON-RPC socket service
+  - [ ] Logging
 
 ## Protocol
 
