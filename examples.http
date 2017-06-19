@@ -1,0 +1,95 @@
+### session creates a session. This isn't used.
+POST http://localhost:4545/
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "session",
+    "params": []
+}
+
+### render renders a template.
+POST http://localhost:4545/
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "render",
+    "params": [
+        "Hi {{ name | capitalize }}",
+        {"name": "alice"}
+    ]
+}
+
+### defaultVariables sets default variables for subsequent renders.
+POST http://localhost:4545/
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "defaultVariables",
+    "params": [{"one": "first", "two": "overridden"}]
+}
+
+### Test default variables.
+POST http://localhost:4545/
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "render",
+    "params": [
+        "{{ one }}, {{ two }}, {{ three }}",
+        {"two": "second", "three": "third"}
+    ]
+}
+
+### fileUrls maps filenames to URLs for the link tag.
+POST http://localhost:4545/
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "fileUrls",
+    "params": [{
+        "/path/to/file.md": "/urlpath/file.html"
+    }]
+}
+
+### Test {% link %}
+POST http://localhost:4545/render
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "render",
+    "params": ["{% link /path/to/file.md %}"]
+}
+
+### includeDirs sets the directories for the include tag.
+POST http://localhost:4545/
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "includeDirs",
+    "params": [["./examples/_includes"]]
+}
+
+### Test {% include %}
+POST http://localhost:4545/render
+Content-Type: application/json-rpc
+
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "render",
+    "params": ["{% include include.md %}"]
+}
