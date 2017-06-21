@@ -9,7 +9,15 @@ const RPC_VERSION = "0.0.1"
 
 const port = process.env.PORT || 4545
 
-const engine = Liquid()
+// TODO make this configurable
+const strict = false
+
+const engine = Liquid({
+    strict_filters: strict,
+    strict_variables: strict,
+    extname: '',
+    root: []
+})
 
 // for debugging
 const GlobalSessionId = 'global'
@@ -40,9 +48,9 @@ engine.registerTag('include', {
     parse: function (tagToken, remainTokens) {
         this.basename = tagToken.args;
     },
-    render: function (context, other) {
+    render: function (ctx, other, opts) {
         const basename = this.basename
-        const filename = _(context.scopes[0]._includeDirs)
+        const filename = _(ctx.scopes[0]._includeDirs)
             .map(function (dir) {
                 return path.join(dir, basename)
             })
@@ -53,8 +61,8 @@ engine.registerTag('include', {
                 return fs.existsSync(file)
             })
         if (!filename) throw new Liquid.Types.AssertionError("no file: " + basename)
-        const source = fs.readFileSync(filename, 'utf8')
-        return engine.parseAndRender(source, context.scopes[0])
+        // return engine.renderFile(filename, ctx, opts)
+        return engine.parseAndRender(fs.readFileSync(filename, 'utf8'), ctx)
     }
 })
 
@@ -86,12 +94,15 @@ var server = jayson.server({
                 })
             })
             .catch(function (error) {
+                console.error(error)
                 callback({
                     code: error.code || -32000,
-                    message: error.message,
+                    message: error.name,
                     data: {
-                        line: error.line,
-                        name: error.name,
+                        filename: error.file,
+                        lineNumber: error.line,
+                        message: error.message,
+                        stack: error.stack
                     }
                 })
             })
